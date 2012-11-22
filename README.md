@@ -22,7 +22,7 @@ The Solution
 ------------
 **I created a set of macros, that allows you to specify key-paths using symbols – classes and selectors.**
 
-![image](Valid-KeyPath/README/example.png)
+![image](./README/example.png)
 
 ---
 
@@ -31,13 +31,13 @@ The Solution
 ### Major Advantages: ###
 1. **Just a string** – This is not a new way to use _Key-Value Coding_, but rather a new way to create strings containing key-paths. You can mix it with raw string notation (`@"key.path"`).
 2. **Code completion** – When typing a selector name Xcode suggests you only selectors (keys) from class you specified.  
-![image](Valid-KeyPath/README/completion.png)  
+![image](./README/completion.png)  
 (Well, it offers you all methods from that class, but this works only with methods taking no arguments = _getters_.)
 3. **Compie time validation** – If you use validating macros, Xcode will throw a compilation error once the given class does not declare given selector.  
-![image](Valid-KeyPath/README/validation.png)  
+![image](./README/validation.png)  
 (You may also use non-validating macros to aviod this, but you may lose other advantages. Use them only if you don't know the class.)
 4. **Refactorable** – Last, but not least major advantage. These keys are fully refactorable using Xcode built-in tool.  
-![image](Valid-KeyPath/README/refactoring.png)  
+![image](./README/refactoring.png)  
 (This works only with validating macros. Non-validating macros will just show a warning during refactoring preview. Validating macros will also display refactoring warning, but you may absolutely ignore them – it will work.)
 5. **This is not enough?** Check out implementation details below for what is happening under the hood.
 
