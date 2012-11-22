@@ -24,6 +24,8 @@ The Solution
 
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/example.png)
 
+Variable `keyPath` wil be equal to `@"view.backgroundColor"`.
+
 
 
 ### Major Advantages: ###
@@ -74,7 +76,7 @@ MTK_KEY(title)   >>>>>   NSStringFromSelector(@selector(title))
 
 
 ### Key Validation ###
-Macro for validating given key against a class contains a chunk of code. Main part is `while` loop, that is breaked immediately, **so the code is __not__ actually executed in runtime**. Inside it calls `class` method on given class and then given selector on instance of this class. This provides refactoring and compile-time validation. Finally return string created by macro above.
+Macro for validating given key against a class contains a chunk of code. Main part is `while` loop, that is breaked immediately, **so the code is _not_ actually executed in runtime**. Inside it calls `class` method on given class and then given selector on instance of this class. This provides refactoring and compile-time validation. Finally return string created by macro above.
 
 ```
 #define MTK_VALID_KEY(__CLASS__, __KEY__)                   \
