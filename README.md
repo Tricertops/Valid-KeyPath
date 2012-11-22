@@ -22,7 +22,7 @@ The Solution
 ------------
 **I created a set of macros, that allows you to specify key-paths using symbols – classes and selectors.**
 
-![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/completion.png)
+![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/example.png)
 
 
 
