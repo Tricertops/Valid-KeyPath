@@ -31,9 +31,9 @@ The Solution
 2. **Code completion** – When typing a selector name Xcode suggests you only selectors (keys) from class you specified.  
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/completion.png)  
 (Well, it offers you all methods from that class, but this works only with methods taking no arguments = _getters_.)
-3. **Compie time validation** – If you use validating macros, Xcode will throw a compilation error once the given class does not declare given selector.  
+3. **Compile-time validation** – If you use validating macros, Xcode will throw a compilation error once the given class does not declare given selector.  
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/validation.png)  
-(You may also use non-validating macros to aviod this, but you may lose other advantages. Use them only if you don't know the class.)
+(You may also use non-validating macros to avoid this, but you may lose other advantages. Use them only if you don't know the class.)
 4. **Refactorable** – Last, but not least major advantage. These keys are fully refactorable using Xcode built-in tool.  
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/refactoring.png)  
 (This works only with validating macros. Non-validating macros will just show a warning during refactoring preview. Validating macros will also display refactoring warning, but you may absolutely ignore them – it will work.)
@@ -52,7 +52,7 @@ The Solution
 
 ## How To Use & Requirements ##
 1. You need to be able to use **blocks** and use of ARC is encouraged.
-2. Inport the two source files located in `MTKValidKeyPath` directory in precompiled header.
+2. Import the two source files located in `MTKValidKeyPath/` directory to precompiled header.
 3. Create aliases for these macros in some global file. See `example.m`:
 
 ```
@@ -65,7 +65,7 @@ The Solution
 ## How Does It Work ##
 
 ### Symbol-To-String Conversion ###
-Macro for converting symbol (method name) to `NSString` uses `NSStringFromSelector` function and `@selector` directive.
+Macro for converting method name to `NSString` uses `NSStringFromSelector` function and `@selector` directive.
 
 ```
 #define MTK_KEY(__KEY__)     (NSStringFromSelector(@selector(__KEY__)))
@@ -74,7 +74,7 @@ MTK_KEY(title)   >>>>>   NSStringFromSelector(@selector(title))
 
 
 ### Key Validation ###
-Macro for validating given key against class contains a chunk of code. Main part is `while` loop, that is breaked immediately, **so the code is not actually executed in runtime**. Inside it calls `class` method on given class and then given selector on instance of this class. This provides refactoring and compile-time validation. Returns string created by macro above.
+Macro for validating given key against a class contains a chunk of code. Main part is `while` loop, that is breaked immediately, **so the code is __not__ actually executed in runtime**. Inside it calls `class` method on given class and then given selector on instance of this class. This provides refactoring and compile-time validation. Finally return string created by macro above.
 
 ```
 #define MTK_VALID_KEY(__CLASS__, __KEY__)                   \
@@ -99,7 +99,7 @@ Simple contructor of `NSMutableString` that also cast the resulting object.
 
 
 ### Key-Path Chaining ###
-Key-path chaining uses dot syntax and blocks. You call method returning block and immediately executing the block with argument in parenthesis. This instance method is added to `NSMutableString` class in category. This block appends given argument to the receiver and returns it, so you can continue chaining.
+Key-path chaining uses dot syntax and blocks. You call method returning block and immediately execute the block with argument in parenthesis. This instance method is added to `NSMutableString` class in category. Block appends given argument to the receiver and returns it, so you can continue chaining.
 
 ```
 - (NSMutableString * (^)(NSString *))mtk_blockAppendingString;
