@@ -10,7 +10,7 @@ Example of key `@"view"` and key-path `@"view.superview.backgroundColor"`.
 
 We know, that _KVC_ and _KVO_ are good and realiable features, but why a lot of programmers is trying to avoid using them massively? We know this too. Because of keys / key-paths. They are simple strings, that can handle anything and are source of troubles when it comes to refactoring. Also, since there is only runtime validiation of these keys, one typo can crash whole application:
 
-```
+```objc
 This class is not key value coding-compliant for the key 'backgroudColor'.
 ```
 
@@ -22,7 +22,7 @@ The Solution
 ------------
 **I created a set of macros, that allows you to specify key-paths using symbols – classes and selectors.**
 
-![image](README/example.png)
+![image](Valid-KeyPath/README/example.png)
 
 ---
 
@@ -31,13 +31,13 @@ The Solution
 ### Major Advantages: ###
 1. **Just a string** – This is not a new way to use _Key-Value Coding_, but rather a new way to create strings containing key-paths. You can mix it with raw string notation (`@"key.path"`).
 2. **Code completion** – When typing a selector name Xcode suggests you only selectors (keys) from class you specified.  
-![image](README/completion.png)  
+![image](Valid-KeyPath/README/completion.png)  
 (Well, it offers you all methods from that class, but this works only with methods taking no arguments = _getters_.)
 3. **Compie time validation** – If you use validating macros, Xcode will throw a compilation error once the given class does not declare given selector.  
-![image](README/validation.png)  
+![image](Valid-KeyPath/README/validation.png)  
 (You may also use non-validating macros to aviod this, but you may lose other advantages. Use them only if you don't know the class.)
 4. **Refactorable** – Last, but not least major advantage. These keys are fully refactorable using Xcode built-in tool.  
-![image](README/refactoring.png)  
+![image](Valid-KeyPath/README/refactoring.png)  
 (This works only with validating macros. Non-validating macros will just show a warning during refactoring preview. Validating macros will also display refactoring warning, but you may absolutely ignore them – it will work.)
 5. **This is not enough?** Check out implementation details below for what is happening under the hood.
 
@@ -61,7 +61,7 @@ The Solution
 2. Inport the two source files located in `MTKValidKeyPath` directory in precompiled header.
 3. Create aliases for these macros in some global file. See `example.m`:
 
-```
+```objc
 #define KEY     MTK_BEGIN_KEY
 #define __      MTK_APPEND_VALID_KEY
 ```
@@ -75,7 +75,7 @@ The Solution
 ##### Symbol-To-String Conversion #####
 Macro for converting symbol (method name) to `NSString` uses `NSStringFromSelector` function and `@selector` directive.
 
-```
+```objc
 #define MTK_KEY(__KEY__)     (NSStringFromSelector(@selector(__KEY__)))
 MTK_KEY(title)   >>>>>   NSStringFromSelector(@selector(title))
 ```
@@ -84,7 +84,7 @@ MTK_KEY(title)   >>>>>   NSStringFromSelector(@selector(title))
 ##### Key Validation #####
 Macro for validating given key against class contains a chunk of code. Main part is `while` loop, that is breaked immediately, **so the code is not actually executed in runtime**. Inside it calls `class` method on given class and then given selector on instance of this class. This provides refactoring and compile-time validation. Returns string created by macro above.
 
-```
+```objc
 #define MTK_VALID_KEY(__CLASS__, __KEY__)                   \
 ({                                                          \
     while (1) {                                             \
@@ -101,7 +101,7 @@ Macro for validating given key against class contains a chunk of code. Main part
 ##### Key-Path Creation #####
 Simple contructor of `NSMutableString` that also cast the resulting object.
 
-```
+```objc
 #define MTK_BEGIN_KEY   ((NSMutableString *)[NSMutableString string])
 ```
 
@@ -109,7 +109,7 @@ Simple contructor of `NSMutableString` that also cast the resulting object.
 ##### Key-Path Chaining #####
 Key-path chaining uses dot syntax and blocks. You call method returning block and immediately executing the block with argument in parenthesis. This instance method is added to `NSMutableString` class in category. This block appends given argument to the receiver and returns it, so you can continue chaining.
 
-```
+```objc
 - (NSMutableString * (^)(NSString *))mtk_blockAppendingString;
 
 mutableString.mtk_blockAppendingString(@"part1").mtk_blockAppendingString(@"part2");
