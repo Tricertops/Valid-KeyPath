@@ -26,6 +26,7 @@ The Solution
 
 Variable `keyPath` is now equal to `@"view.backgroundColor"`, so you can pass it as an argument to any _KVO_ or _KVO_ method.
 
+I must admit, that just after publishing this repo, I found much better and elegant solution. This [libextobjc on GitHub](https://github.com/jspahrsummers/libextobjc). Just take two files: `extobjc/EXTKeyPathCoding.h` and `extobjc/metamacros.h` and you have the same feature in better syntax.
 
 
 ### Major Advantages: ###
