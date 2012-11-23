@@ -24,7 +24,7 @@ The Solution
 
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/example.png)
 
-Variable `keyPath` wil be equal to `@"view.backgroundColor"`.
+Variable `keyPath` is now equal to `@"view.backgroundColor"`, so you can pass it as an argument to any _KVO_ or _KVO_ method.
 
 
 
@@ -38,7 +38,7 @@ Variable `keyPath` wil be equal to `@"view.backgroundColor"`.
 (You may also use non-validating macros to avoid this, but you may lose other advantages. Use them only if you don't know the class.)
 4. **Refactorable** – Last, but not least major advantage. These keys are fully refactorable using Xcode built-in tool.  
 ![image](https://raw.github.com/iMartinKiss/Valid-KeyPath/master/README/refactoring.png)  
-(This works only with validating macros. Non-validating macros will just show a warning during refactoring preview. Validating macros will also display refactoring warning, but you may absolutely ignore them – it will work.)
+(This works only with validating macros. Non-validating macros will just show a warning during refactoring preview. Validating macros will also display refactoring warning, but you may absolutely ignore it – it will work.)
 5. **This is not enough?** Check out implementation details below for what is happening under the hood.
 
 
@@ -46,22 +46,31 @@ Variable `keyPath` wil be equal to `@"view.backgroundColor"`.
 ### Minor Disadvantages: ###
 
 1. **Little more typing** – Yes, in general you hit keyboard more times than with raw key-paths. But you will hit less while refactoring or fixing stupid typos.
-2. **Longer compilation** – Since macros contains some code. Project will take longer to compile – additional 0.5 second or so.
-3. **Slower runtine** – Additional code will in theory add some time. Content of macros are altered on RELEASE, so there is less of it.
-4. **Does these really matters?** Check out implementation details below for what is happening under the hood.
+2. **Import classes** – Sometimes it happen, that you will need to import more classes only for the key-path validation. Terrible! Or you can just use non-validating macros instead.
+3. **Longer compilation** – Since macros contains some code. Project will take longer to compile – additional 0.5 second or so.
+4. **Slower runtine** – Additional code will in theory add some time. Content of macros are altered on RELEASE, so there is less of it.
+5. **Does these really matters?** Check out implementation details below for what is happening under the hood.
 
 
 
 ## How To Use & Requirements ##
 1. You need to be able to use **blocks** and use of ARC is encouraged.
-2. Import the two source files located in `MTKValidKeyPath/` directory to precompiled header.
-3. Create aliases for these macros in some global file. See `example.m`:
+2. Import the two source files located in directory `MTKValidKeyPath/` into precompiled header.
+3. Now you can use these macros:
+    - `MTK_KEY( KEY )` – simple non-validating symbol-to-string conversion
+    - `MTK_VALID_KEY( CLASS , KEY )` – symbol-to-string conversion that validates key against given class
+    - **`MTK_BEGIN_KEY`** – macro that creates `NSMutableString` that can be used for dot-chaining
+    - `MTK_APPEND_KEY( KEY )` – used for dot-chaining key-paths, non-validating
+    - **`MTK_APPEND_VALID_KEY( CLASS , KEY )`** – also for dot-chaining key-paths, but with validation
+
+4. Create project-specific aliases for these macros in some global file, so you don't have to type whole names. See `example.m`:
 
 ```
 #define KEY     MTK_BEGIN_KEY
 #define __      MTK_APPEND_VALID_KEY
 ```
 
+Then use it like this `KEY.__(MyVideo, metadata).__(MyMetadata, title)` and the resulting string is `@"metadata.title"`.
 
 
 ## How Does It Work ##
